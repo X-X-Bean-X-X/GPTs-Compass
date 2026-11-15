@@ -15,7 +15,7 @@ namespace GTPCompass
     public sealed class Mod : IMod
     {
         internal const string Id = "GTPCompass";
-        internal const string Title = "GTP's Compass by X_Bean_X";
+        internal const string Title = "GPT's Compass by X_Bean_X";
         internal const string Version = "1.0.0";
         internal static readonly ILog Log = LogManager.GetLogger(Id).SetShowsErrorsInUI(false);
         internal static CompassSettings Settings { get; private set; }

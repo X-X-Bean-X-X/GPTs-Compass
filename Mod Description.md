@@ -1,4 +1,4 @@
-# GTP's Compass by X_Bean_X
+# GPT's Compass by X_Bean_X
 
 See map north and your camera heading in Cities: Skylines II.
 

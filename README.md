@@ -1,11 +1,13 @@
-# GTP's Compass by X_Bean_X
+# GPT's Compass by X_Bean_X
 
 See map north and your camera heading in Cities: Skylines II. Keep the compass hovering over the map or anchor it to the toolbar.
 
+<img src="Artwork/Thumbnail.png" width="360" alt="GPT's Compass by X_Bean_X — Brass on Chicago">
+
 - [Paradox Mods](https://mods.paradoxplaza.com/mods/167813/Windows)
-- [v1.0.0 Windows ZIP](https://github.com/X-X-Bean-X-X/GTPsCompass/releases/download/v1.0.0/GTPCompass-1.0.0-Windows.zip) for game version 1.6.4f1
+- [v1.0.0 Windows ZIP](https://github.com/X-X-Bean-X-X/GPTs-Compass/releases/download/v1.0.0/GTPCompass-1.0.0-Windows.zip) for game version 1.6.4f1
 - [Controls and options](Mod%20Description.md)
-- [Ten compass styles](Artwork/CompassStyles.png) and the [Brass on Chicago cover](Artwork/Thumbnail.png)
+- [Ten compass styles](Artwork/CompassStyles.png)
 
 ## Install
 
