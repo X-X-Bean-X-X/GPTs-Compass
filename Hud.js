@@ -49,6 +49,16 @@
             anchored: "M 50 8 L 57.8 18.5 L 42.2 18.5 Z",
             anchoredCockpit: "M 50 17 L 92 56 L 8 56 Z"
         };
+        // Overpass Bold's capital N with heavier strokes for the toolbar size.
+        const northGlyphPath = "M 13.99 18 H 11.19 L 3.73 6.63 C 3.49 6.27 3.24 5.83 2.98 5.3 " +
+            "C 3.03 5.71 3.06 6.15 3.06 6.63 V 18 H 0 V 0 H 2.98 L 10.26 11.19 " +
+            "C 10.43 11.44 10.68 11.9 11.01 12.55 C 10.95 12.09 10.93 11.63 10.93 11.19 V 0 H 13.99 Z";
+        const northGlyph = `
+            <svg class="gtpc-n-glyph" viewBox="-2.05 -2.05 18.1 22.1" aria-hidden="true">
+                <path class="gtpc-n-outline" d="${northGlyphPath}" fill="none" stroke="#07131f"
+                    stroke-width="4" stroke-linejoin="round"/>
+                <path class="gtpc-n-ink" d="${northGlyphPath}" stroke-width="2.9" stroke-linejoin="round"/>
+            </svg>`;
         const style = document.createElement("style");
         style.textContent = `
             #gtp-compass {
@@ -86,10 +96,11 @@
             .gtpc-surface .gtpc-letter {
                 position: absolute; left: 42%; top: 19%; width: 16%; height: 9%;
                 display: flex; align-items: center; justify-content: center;
-                color: #fff1ce; font-weight: 800; font-style: normal; line-height: 1;
-                text-shadow: 0 1px 2px #07131f; pointer-events: none;
+                pointer-events: none;
             }
-            .gtpc-anchored .gtpc-letter { font-weight: 600; }
+            .gtpc-surface .gtpc-n-glyph {
+                display: block; flex-shrink: 0;
+            }
             .gtpc-surface .gtpc-cockpit-n {
                 display: none; top: 46.3%; width: 6%; height: 7%;
             }
@@ -182,7 +193,7 @@
                         <path class="gtpc-needle-detail" d="M 50 27 L 50 45.25 Q 47.6 45.4 45.4 47 Z" fill="url(#gtpc-needle-amber)"/>
                         <path class="gtpc-needle-detail" d="M 50 29 L 50 44.8" stroke="#ffbd54" stroke-width="0.35"/>
                     </svg>
-                    <span class="gtpc-letter gtpc-n">N</span>
+                    <span class="gtpc-letter gtpc-n">${northGlyph}</span>
                 </div>
                 <div class="gtpc-layer gtpc-heading" aria-hidden="true">
                     <svg class="gtpc-layer" viewBox="0 0 100 100">
@@ -190,7 +201,7 @@
                             fill="${neonGreen}" stroke="#07131f" stroke-width="0.9" stroke-linejoin="round"/>
                     </svg>
                 </div>
-                <span class="gtpc-letter gtpc-cockpit-n" aria-hidden="true">N</span>
+                <span class="gtpc-letter gtpc-cockpit-n" aria-hidden="true">${northGlyph}</span>
                 <div class="gtpc-layer gtpc-cockpit-scale" aria-hidden="true"></div>
             </button>
             <div class="gtpc-handle gtpc-nw" data-x="-1" data-y="-1" aria-hidden="true"></div>
@@ -222,6 +233,10 @@
         const needle = root.querySelector(".gtpc-north");
         const northLetter = root.querySelector(".gtpc-n");
         const cockpitLetter = root.querySelector(".gtpc-cockpit-n");
+        const northLetterGlyph = northLetter.querySelector(".gtpc-n-glyph");
+        const cockpitLetterGlyph = cockpitLetter.querySelector(".gtpc-n-glyph");
+        const northOutline = northLetter.querySelector(".gtpc-n-outline");
+        const northGlyphs = Array.from(root.querySelectorAll(".gtpc-n-ink"));
         const cockpitScale = root.querySelector(".gtpc-cockpit-scale");
         const degreeLabels = cockpitTicks.map(() => {
             const label = document.createElement("span");
@@ -449,7 +464,7 @@
             anchored = next;
             suppressClick = false;
             root.classList.toggle("gtpc-anchored", anchored);
-            updateMarkerAppearance();
+            updateHeadingArrow();
             placementValue.textContent = anchored ? "Anchored Compass" : "Hovering Compass";
             placementButtons.forEach((button, index) => button.setAttribute("aria-current", String((index === 1) === anchored)));
             trackToolbar();
@@ -481,8 +496,10 @@
 
         function sizeLabels() {
             const fontScale = selectedStyle.id === "Wealthy" ? 0.062 : 0.08;
-            northLetter.style.fontSize = Math.max(7, Math.round(bounds.size * fontScale)) + "px";
-            cockpitLetter.style.fontSize = Math.max(7, Math.round(bounds.size * 0.078)) + "px";
+            const northSize = 0.9 * Math.max(7, Math.round(bounds.size * fontScale)) + "px";
+            const cockpitSize = 0.9 * Math.max(7, Math.round(bounds.size * 0.078)) + "px";
+            northLetterGlyph.style.width = northLetterGlyph.style.height = northSize;
+            cockpitLetterGlyph.style.width = cockpitLetterGlyph.style.height = cockpitSize;
             const degreeSize = Math.max(7, Math.round(bounds.size * 0.045)) * Math.min(1, bounds.size / 64);
             const edge = degreeSize * 1.25;
             cockpitScale.style.fontSize = degreeSize + "px";
@@ -536,18 +553,13 @@
             return artRoot + (option.file || option.id + ".png");
         }
 
-        function updateMarkerAppearance() {
+        function updateHeadingArrow() {
             const marker = selectedStyle.marker;
             let path = headingPaths[marker] || headingPaths.standard;
             if (anchored) {
                 path = marker === "cockpit" ? headingPaths.anchoredCockpit : headingPaths.anchored;
             }
             headingArrow.setAttribute("d", path);
-            const letterColor = anchored ? selectedStyle.letter : neonGreen;
-            northLetter.style.color = letterColor;
-            cockpitLetter.style.color = letterColor;
-            const letterShadow = (anchored && selectedStyle.shadow) || "#07131f";
-            northLetter.style.textShadow = "0 1px 2px " + letterShadow;
         }
 
         function setStyle(id) {
@@ -561,7 +573,12 @@
             northArrow.setAttribute("fill", option.arrow);
             northArrow.setAttribute("stroke", option.marker === "needle" ? "#321b10" : "#17171f");
             needleDetails.forEach(part => part.setAttribute("visibility", option.marker === "needle" ? "visible" : "hidden"));
-            updateMarkerAppearance();
+            updateHeadingArrow();
+            northOutline.setAttribute("stroke", option.shadow || "#07131f");
+            northGlyphs.forEach(glyph => {
+                glyph.setAttribute("fill", option.letter);
+                glyph.setAttribute("stroke", option.letter);
+            });
             const cockpit = option.marker === "cockpit";
             northLetter.style.display = cockpit ? "none" : "flex";
             cockpitLetter.style.display = cockpit ? "flex" : "none";

@@ -5,7 +5,7 @@ See map north and your camera heading in Cities: Skylines II. Keep the compass h
 <img src="Artwork/Thumbnail.png" width="360" alt="GPT's Compass by X_Bean_X — Brass on Chicago">
 
 - [Paradox Mods](https://mods.paradoxplaza.com/mods/167813/Windows)
-- [v1.0.1 Windows ZIP](https://github.com/X-X-Bean-X-X/GPTs-Compass/releases/download/v1.0.1/GTPCompass-1.0.1-Windows.zip) for game version 1.6.4f1
+- [v1.0.2 Windows ZIP](https://github.com/X-X-Bean-X-X/GPTs-Compass/releases/download/v1.0.2/GTPCompass-1.0.2-Windows.zip) for game version 1.6.4f1
 - [Controls and options](Mod%20Description.md)
 - [Ten compass styles](Artwork/CompassStyles.png)
 
@@ -24,4 +24,4 @@ Install the Cities: Skylines II modding toolchain and Roslyn. Run `./Build.ps1` 
 | `CSII_MODPOSTPROCESSORPATH` | `-PostProcessor` | CS2 mod postprocessor executable |
 | `CSII_UNITYMODPROJECTPATH` | `-UnityModProject` | Toolchain Unity mod project directory |
 
-Use `-CompileOnly` to compile the managed assembly. The full build creates `build/GTPCompass-1.0.1-Windows.zip`.
+Use `-CompileOnly` to compile the managed assembly. The full build creates `build/GTPCompass-1.0.2-Windows.zip`.

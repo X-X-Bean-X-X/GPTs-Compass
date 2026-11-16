@@ -4,7 +4,7 @@ See map north and your camera heading in Cities: Skylines II.
 
 ## Use the compass
 
-- The hovering compass uses a bold neon-green **N** for map north. The solid neon-green triangle shows your camera heading.
+- A bold **N** marks map north. The solid neon-green triangle shows your camera heading.
 - **Click** the compass to open its menu.
 - In **Hovering Compass**, hold **Ctrl** and drag to move.
 - Hold **Ctrl + Shift** while hovering to reveal four handles. Drag any corner to resize.

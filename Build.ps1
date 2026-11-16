@@ -81,6 +81,6 @@ foreach ($style in $styles) {
 foreach ($path in $payload) {
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Missing processed payload $path" }
 }
-$zip = Join-Path $build 'GTPCompass-1.0.1-Windows.zip'
+$zip = Join-Path $build 'GTPCompass-1.0.2-Windows.zip'
 Compress-Archive -LiteralPath $payload -DestinationPath $zip -Force
 Write-Output "Packaged $zip"
