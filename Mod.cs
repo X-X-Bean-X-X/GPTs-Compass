@@ -16,7 +16,7 @@ namespace GTPCompass
     {
         internal const string Id = "GTPCompass";
         internal const string Title = "GPT's Compass by X_Bean_X";
-        internal const string Version = "1.0.0";
+        internal const string Version = "1.0.1";
         internal static readonly ILog Log = LogManager.GetLogger(Id).SetShowsErrorsInUI(false);
         internal static CompassSettings Settings { get; private set; }
         private CompassHudSystem m_Hud;

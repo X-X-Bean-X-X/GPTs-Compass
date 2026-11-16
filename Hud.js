@@ -5,6 +5,7 @@
         if (window.gtpCompassHud) window.gtpCompassHud.dispose();
         const prefix = "gtpCompass.";
         const artRoot = "coui://gtp-compass/";
+        const neonGreen = "#39ff14";
         const hoveringHint = "Ctrl + Left Click to Move  |  Shift + Ctrl to Resize";
         const toolbarRowSelector = [
             '[class*="top-new_"] > [class*="end_"]',
@@ -42,9 +43,9 @@
             cockpit: "M 50 25 L 82 60 L 50 52 L 18 60 Z"
         };
         const headingPaths = {
-            standard: "M 45.5 19.8 L 50 15.4 L 54.5 19.8 L 52.8 21.3 L 50 18.6 L 47.2 21.3 Z",
-            pixel: "M 48 14 H 52 V 17 H 55 V 20 H 58 V 24 H 54 V 21 H 51 V 18 H 49 V 21 H 46 V 24 H 42 V 20 H 45 V 17 H 48 Z",
-            cockpit: "M 17 49 L 50 26 L 83 49 L 72 58 L 50 43 L 28 58 Z",
+            standard: "M 50 10.5 L 56 18.5 L 44 18.5 Z",
+            pixel: "M 50 7 L 59 18 L 41 18 Z",
+            cockpit: "M 50 18 L 88 53 L 12 53 Z",
             anchored: "M 50 8 L 57.8 18.5 L 42.2 18.5 Z",
             anchoredCockpit: "M 50 17 L 92 56 L 8 56 Z"
         };
@@ -85,9 +86,10 @@
             .gtpc-surface .gtpc-letter {
                 position: absolute; left: 42%; top: 19%; width: 16%; height: 9%;
                 display: flex; align-items: center; justify-content: center;
-                color: #fff1ce; font-weight: 600; font-style: normal; line-height: 1;
+                color: #fff1ce; font-weight: 800; font-style: normal; line-height: 1;
                 text-shadow: 0 1px 2px #07131f; pointer-events: none;
             }
+            .gtpc-anchored .gtpc-letter { font-weight: 600; }
             .gtpc-surface .gtpc-cockpit-n {
                 display: none; top: 46.3%; width: 6%; height: 7%;
             }
@@ -184,8 +186,8 @@
                 </div>
                 <div class="gtpc-layer gtpc-heading" aria-hidden="true">
                     <svg class="gtpc-layer" viewBox="0 0 100 100">
-                        <path class="gtpc-heading-arrow" d="M 45.5 19.8 L 50 15.4 L 54.5 19.8 L 52.8 21.3 L 50 18.6 L 47.2 21.3 Z"
-                            fill="#ffffff" stroke="#07131f" stroke-width="0.9" stroke-linejoin="round"/>
+                        <path class="gtpc-heading-arrow" d="${headingPaths.standard}"
+                            fill="${neonGreen}" stroke="#07131f" stroke-width="0.9" stroke-linejoin="round"/>
                     </svg>
                 </div>
                 <span class="gtpc-letter gtpc-cockpit-n" aria-hidden="true">N</span>
@@ -447,7 +449,7 @@
             anchored = next;
             suppressClick = false;
             root.classList.toggle("gtpc-anchored", anchored);
-            updateHeadingArrow();
+            updateMarkerAppearance();
             placementValue.textContent = anchored ? "Anchored Compass" : "Hovering Compass";
             placementButtons.forEach((button, index) => button.setAttribute("aria-current", String((index === 1) === anchored)));
             trackToolbar();
@@ -534,14 +536,18 @@
             return artRoot + (option.file || option.id + ".png");
         }
 
-        function updateHeadingArrow() {
+        function updateMarkerAppearance() {
             const marker = selectedStyle.marker;
             let path = headingPaths[marker] || headingPaths.standard;
             if (anchored) {
                 path = marker === "cockpit" ? headingPaths.anchoredCockpit : headingPaths.anchored;
             }
             headingArrow.setAttribute("d", path);
-            headingArrow.setAttribute("fill", anchored ? "#39ff14" : "#ffffff");
+            const letterColor = anchored ? selectedStyle.letter : neonGreen;
+            northLetter.style.color = letterColor;
+            cockpitLetter.style.color = letterColor;
+            const letterShadow = (anchored && selectedStyle.shadow) || "#07131f";
+            northLetter.style.textShadow = "0 1px 2px " + letterShadow;
         }
 
         function setStyle(id) {
@@ -555,14 +561,11 @@
             northArrow.setAttribute("fill", option.arrow);
             northArrow.setAttribute("stroke", option.marker === "needle" ? "#321b10" : "#17171f");
             needleDetails.forEach(part => part.setAttribute("visibility", option.marker === "needle" ? "visible" : "hidden"));
-            updateHeadingArrow();
+            updateMarkerAppearance();
             const cockpit = option.marker === "cockpit";
             northLetter.style.display = cockpit ? "none" : "flex";
             cockpitLetter.style.display = cockpit ? "flex" : "none";
             cockpitScale.style.display = cockpit ? "block" : "none";
-            northLetter.style.color = option.letter;
-            cockpitLetter.style.color = option.letter;
-            northLetter.style.textShadow = "0 1px 2px " + (option.shadow || "#07131f");
             styleChoices.forEach(({ button }, index) => button.setAttribute("aria-current", String(styles[index] === option)));
             styleValue.textContent = option.label;
             sizeLabels();
